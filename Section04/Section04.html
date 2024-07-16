@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Section04</title>
+</head>
+<body>
+    <h1>Section04</h1>
+    <button onclick="generateLog()">ログ生成</button>
+
+    <script>
+        function generateLog() {
+            const logContent = 'ログファイルが生成されました。\n';
+
+            const logFileName = 'log/log.txt';
+            const logDirectory = 'log';
+
+            let existingLogData = localStorage.getItem('logData') || '';
+
+            existingLogData += logContent;
+
+            localStorage.setItem('logData', existingLogData);
+
+            const isLocalStorageChanged = localStorage.getItem('isLocalStorageChanged');
+            if (!isLocalStorageChanged) {
+                localStorage.setItem('isLocalStorageChanged', 'true');
+            }
+
+            if (!localStorage.getItem('isLogFolderCreated')) {
+                localStorage.setItem('isLogFolderCreated', 'true');
+            }
+
+            const blob = new Blob([existingLogData], { type: 'text/plain' });
+            const logFileUrl = URL.createObjectURL(blob);
+
+            const downloadLink = document.createElement('a');
+            downloadLink.href = logFileUrl;
+            downloadLink.download = logFileName;
+            downloadLink.click();
+        }
+    </script>
+</body>
+</html>
